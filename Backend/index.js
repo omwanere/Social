@@ -15,6 +15,13 @@ const PORT = process.env.PORT || 3000;
 
 const __dirname = path.resolve();
 
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection:', reason);
+});
+
 //middlewares
 app.use(express.json());
 app.use(cookieParser());

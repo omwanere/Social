@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "./ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Link } from "react-router-dom";
 import { MoreHorizontal } from "lucide-react";
@@ -68,6 +68,8 @@ const CommentDialog = ({ open, setOpen }) => {
         onInteractOutside={() => setOpen(false)}
         className="max-w-5xl p-0 flex flex-col"
       >
+        <DialogTitle>Post Comments</DialogTitle>
+        <DialogDescription>View and add comments to this post.</DialogDescription>
         <div className="flex flex-1">
           <div className="w-1/2">
             <img
@@ -98,6 +100,8 @@ const CommentDialog = ({ open, setOpen }) => {
                   <MoreHorizontal className="cursor-pointer" />
                 </DialogTrigger>
                 <DialogContent className="flex flex-col items-center text-sm text-center">
+                  <DialogTitle>Post Options</DialogTitle>
+                  <DialogDescription>Options for this post.</DialogDescription>
                   <div className="cursor-pointer w-full text-[#ED4956] font-bold">
                     Unfollow
                   </div>

@@ -44,7 +44,7 @@ const EditProfile = () => {
     formData.append("bio", input.bio);
     formData.append("gender", input.gender);
     if (input.profilePhoto) {
-      formData.append("profilePhoto", input.profilePhoto);
+      formData.append("profilePicture", input.profilePhoto);
     }
     try {
       setLoading(true);

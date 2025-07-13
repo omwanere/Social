@@ -1,41 +1,70 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import axios from "axios";
+import { toast } from "sonner";
+import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
 
 const SuggestedUsers = () => {
-  const { suggestedUsers } = useSelector((store) => store.auth);
+  const { suggestedUsers, user } = useSelector((store) => store.auth);
+  const [loadingId, setLoadingId] = useState(null);
+
+  const handleFollow = async (suggestedUserId, isFollowing) => {
+    try {
+      setLoadingId(suggestedUserId);
+      const res = await axios.post(
+        `http://localhost:8000/api/v1/user/follow/${suggestedUserId}`,
+        {},
+        { withCredentials: true }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message);
+        useGetSuggestedUsers();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to follow/unfollow user");
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
   return (
     <div className="my-10">
       <div className="flex items-center justify-between text-sm">
         <h1 className="font-semibold text-gray-600">Suggested for you</h1>
         <span className="font-medium cursor-pointer">See All</span>
       </div>
-      {suggestedUsers.map((user) => {
+      {suggestedUsers.map((suggestedUser) => {
+        const isFollowing = suggestedUser.followers?.includes(user?._id);
         return (
           <div
-            key={user._id}
+            key={suggestedUser._id}
             className="flex items-center justify-between my-5"
           >
             <div className="flex items-center gap-2">
-              <Link to={`/profile/${user?._id}`}>
+              <Link to={`/profile/${suggestedUser?._id}`}>
                 <Avatar>
-                  <AvatarImage src={user?.profilePicture} alt="post_image" />
+                  <AvatarImage src={suggestedUser?.profilePicture} alt="post_image" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </Link>
               <div>
                 <h1 className="font-semibold text-sm">
-                  <Link to={`/profile/${user?._id}`}>{user?.username}</Link>
+                  <Link to={`/profile/${suggestedUser?._id}`}>{suggestedUser?.username}</Link>
                 </h1>
                 <span className="text-gray-600 text-sm">
-                  {user?.bio || "Bio here..."}
+                  {suggestedUser?.bio || "Bio here..."}
                 </span>
               </div>
             </div>
-            <span className="text-[#3BADF8] text-xs font-bold cursor-pointer hover:text-[#3495d6]">
-              Follow
-            </span>
+            <button
+              className={`text-xs font-bold cursor-pointer px-3 py-1 rounded ${isFollowing ? "bg-gray-200 text-gray-700" : "bg-[#3BADF8] text-white"} ${loadingId === suggestedUser._id ? "opacity-50" : ""}`}
+              disabled={loadingId === suggestedUser._id}
+              onClick={() => handleFollow(suggestedUser._id, isFollowing)}
+            >
+              {isFollowing ? "Unfollow" : "Follow"}
+            </button>
           </div>
         );
       })}

@@ -21,5 +21,6 @@ router
   .post(isAuthenticated, upload.single("profilePicture"), editProfile);
 router.route("/suggested").get(isAuthenticated, getSuggestedUsers);
 router.route("/followorunfollow/:id").post(isAuthenticated, followOrUnfollow);
+router.route("/follow/:id").post(isAuthenticated, followOrUnfollow);
 
 export default router;

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Conversation } from "../models/conversation.model.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 import { Message } from "../models/message.model.js";
@@ -7,6 +8,7 @@ export const sendMessage = async (req, res) => {
     const senderId = req.id;
     const receiverId = req.params.id;
     const { textMessage: message } = req.body;
+    console.log("sendMessage called:", { senderId, receiverId, body: req.body }); // Debug log
 
     let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
@@ -14,7 +16,7 @@ export const sendMessage = async (req, res) => {
     // establish the conversation if not started yet.
     if (!conversation) {
       conversation = await Conversation.create({
-        participants: [senderId, receiverId],
+        participants: [new mongoose.Types.ObjectId(senderId), new mongoose.Types.ObjectId(receiverId)],
       });
     }
     const newMessage = await Message.create({
@@ -37,7 +39,8 @@ export const sendMessage = async (req, res) => {
       newMessage,
     });
   } catch (error) {
-    console.log(error);
+    console.log("sendMessage error:", error);
+    return res.status(500).json({ success: false, error: error.message || "Internal server error" });
   }
 };
 export const getMessage = async (req, res) => {
@@ -55,5 +58,6 @@ export const getMessage = async (req, res) => {
       .json({ success: true, messages: conversation?.messages });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({ success: false, error: error.message || "Internal server error" });
   }
 };

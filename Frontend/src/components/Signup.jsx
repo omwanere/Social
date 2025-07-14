@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
+import ThemeToggle from "./ThemeToggle";
 
 const Signup = () => {
   const [input, setInput] = useState({
@@ -58,7 +59,8 @@ const Signup = () => {
     }
   }, []);
   return (
-    <div className="flex items-center w-screen h-screen justify-center">
+    <div className="flex items-center w-screen h-screen justify-center relative">
+      <ThemeToggle floating />
       <form
         onSubmit={signupHandler}
         className="shadow-lg flex flex-col gap-5 p-8"

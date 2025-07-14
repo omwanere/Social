@@ -1,111 +1,68 @@
-import { useEffect, useState } from "react";
-import ChatPage from "./components/ChatPage";
-import EditProfile from "./components/EditProfile";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import MainLayout from "./components/MainLayout";
-import Profile from "./components/Profile";
-import Signup from "./components/Signup";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { io } from "socket.io-client";
+import { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { setAuthUser } from "./redux/AuthSlice";
 import { setOnlineUsers } from "./redux/chatSlice";
 import { setLikeNotification } from "./redux/rtnSlice";
-import ProtectedRoutes from "./components/ProtectedRoutes";
+import { io } from "socket.io-client";
+import { Toaster } from "sonner";
 import { SocketContext } from "./lib/SocketContext";
-
-const browserRouter = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <ProtectedRoutes>
-        <MainLayout />
-      </ProtectedRoutes>
-    ),
-    children: [
-      {
-        path: "/",
-        element: (
-          <ProtectedRoutes>
-            <Home />
-          </ProtectedRoutes>
-        ),
-      },
-      {
-        path: "/profile/:id",
-        element: (
-          <ProtectedRoutes>
-            {" "}
-            <Profile />
-          </ProtectedRoutes>
-        ),
-      },
-      {
-        path: "/account/edit",
-        element: (
-          <ProtectedRoutes>
-            <EditProfile />
-          </ProtectedRoutes>
-        ),
-      },
-      {
-        path: "/chat",
-        element: (
-          <ProtectedRoutes>
-            <ChatPage />
-          </ProtectedRoutes>
-        ),
-      },
-    ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-]);
+import { useState } from "react";
+import Home from "./components/Home";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import MainLayout from "./components/MainLayout";
+import Profile from "./components/Profile";
+import Messages from "./components/Messages";
+import ChatPage from "./components/ChatPage";
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import "./index.css";
 
 function App() {
-  const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      dispatch(setAuthUser(storedUser));
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     if (user) {
       const socketio = io("http://localhost:8000", {
-        query: {
-          userId: user?._id,
-        },
-        transports: ["websocket"],
+        withCredentials: true,
       });
       setSocket(socketio);
-
-      // listen all the events
-      socketio.on("getOnlineUsers", (onlineUsers) => {
-        dispatch(setOnlineUsers(onlineUsers));
+      socketio.on("getOnlineUsers", (users) => {
+        dispatch(setOnlineUsers(users));
       });
-
-      socketio.on("notification", (notification) => {
-        dispatch(setLikeNotification(notification));
+      socketio.on("likeNotification", (data) => {
+        dispatch(setLikeNotification(data));
       });
-
       return () => {
-        socketio.close();
-        setSocket(null);
+        socketio.disconnect();
       };
-    } else if (socket) {
-      socket.close();
-      setSocket(null);
     }
-    // eslint-disable-next-line
   }, [user, dispatch]);
 
   return (
     <SocketContext.Provider value={socket}>
-      <RouterProvider router={browserRouter} />
+      <Router>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<ProtectedRoutes><Home /></ProtectedRoutes>} />
+            <Route path="/profile/:id" element={<ProtectedRoutes><Profile /></ProtectedRoutes>} />
+            <Route path="/messages" element={<ProtectedRoutes><Messages /></ProtectedRoutes>} />
+            <Route path="/chat/:id" element={<ProtectedRoutes><ChatPage /></ProtectedRoutes>} />
+          </Route>
+          <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+          <Route path="/signup" element={user ? <Navigate to="/" /> : <Signup />} />
+        </Routes>
+        <Toaster position="top-center" richColors />
+      </Router>
     </SocketContext.Provider>
   );
 }

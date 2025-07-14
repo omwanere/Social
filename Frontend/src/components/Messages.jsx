@@ -41,7 +41,7 @@ const Messages = ({ selectedUser }) => {
                   className={`p-2 rounded-lg max-w-xs break-words ${
                     msg.senderId === user?._id
                       ? "bg-blue-500 text-white"
-                      : "bg-gray-200 text-black"
+                      : "bg-muted text-foreground"
                   }`}
                 >
                   {msg.message}

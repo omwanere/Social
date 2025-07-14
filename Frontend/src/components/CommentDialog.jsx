@@ -1,139 +1,84 @@
-import React, { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "./ui/dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Link } from "react-router-dom";
-import { MoreHorizontal } from "lucide-react";
-import { Button } from "./ui/button";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Comment from "./Comment";
+import { setSelectedPost } from "../redux/postSlice";
+import { Dialog, DialogContent } from "./ui/dialog";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { Avatar, AvatarImage } from "./ui/avatar";
+import { setPosts } from "../redux/postSlice";
+import { clearLikeNotifications } from "../redux/rtnSlice";
 import axios from "axios";
-import { toast } from "sonner";
-import { setPosts } from "@/redux/postSlice";
 
-const CommentDialog = ({ open, setOpen }) => {
-  const [text, setText] = useState("");
-  const { selectedPost, posts } = useSelector((store) => store.post);
-  const [comment, setComment] = useState([]);
+const CommentDialog = ({ open, onOpenChange, selectedPost }) => {
   const dispatch = useDispatch();
+  const { posts } = useSelector((state) => state.post);
+  const { user } = useSelector((state) => state.auth);
+  const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (selectedPost) {
-      setComment(selectedPost.comments);
-    }
-  }, [selectedPost]);
-
-  const changeEventHandler = (e) => {
-    const inputText = e.target.value;
-    if (inputText.trim()) {
-      setText(inputText);
-    } else {
-      setText("");
-    }
-  };
-
-  const sendMessageHandler = async () => {
+  const handleAddComment = async () => {
+    if (!comment.trim()) return;
+    setLoading(true);
     try {
       const res = await axios.post(
         `http://localhost:8000/api/v1/post/${selectedPost?._id}/comment`,
-        { text },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
+        { text: comment },
+        { withCredentials: true }
       );
-
-      if (res.data.success) {
-        const updatedCommentData = [...comment, res.data.comment];
-        setComment(updatedCommentData);
-
-        const updatedPostData = posts.map((p) =>
-          p._id === selectedPost._id
-            ? { ...p, comments: updatedCommentData }
-            : p
-        );
-        dispatch(setPosts(updatedPostData));
-        toast.success(res.data.message);
-        setText("");
-      }
+      const updatedPosts = posts.map((post) =>
+        post._id === selectedPost._id ? { ...post, comments: res.data.comments } : post
+      );
+      dispatch(setPosts(updatedPosts));
+      setComment("");
+      dispatch(setSelectedPost({ ...selectedPost, comments: res.data.comments }));
     } catch (error) {
-      console.log(error);
+      // handle error
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <Dialog open={open}>
-      <DialogContent
-        onInteractOutside={() => setOpen(false)}
-        className="max-w-5xl p-0 flex flex-col"
-      >
-        <DialogTitle>Post Comments</DialogTitle>
-        <DialogDescription>View and add comments to this post.</DialogDescription>
-        <div className="flex flex-1">
-          <div className="w-1/2">
-            <img
-              src={selectedPost?.image}
-              alt="post_img"
-              className="w-full h-full object-cover rounded-l-lg"
-            />
-          </div>
-          <div className="w-1/2 flex flex-col justify-between">
-            <div className="flex items-center justify-between p-4">
-              <div className="flex gap-3 items-center">
-                <Link>
-                  <Avatar>
-                    <AvatarImage src={selectedPost?.author?.profilePicture} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </Link>
-                <div>
-                  <Link className="font-semibold text-xs">
-                    {selectedPost?.author?.username}
-                  </Link>
-                  {/* <span className='text-gray-600 text-sm'>Bio here...</span> */}
-                </div>
-              </div>
+  const handleDialogClose = () => {
+    onOpenChange(false);
+    dispatch(clearLikeNotifications());
+  };
 
-              <Dialog>
-                <DialogTrigger asChild>
-                  <MoreHorizontal className="cursor-pointer" />
-                </DialogTrigger>
-                <DialogContent className="flex flex-col items-center text-sm text-center">
-                  <DialogTitle>Post Options</DialogTitle>
-                  <DialogDescription>Options for this post.</DialogDescription>
-                  <div className="cursor-pointer w-full text-[#ED4956] font-bold">
-                    Unfollow
-                  </div>
-                  <div className="cursor-pointer w-full">Add to favorites</div>
-                </DialogContent>
-              </Dialog>
+  return (
+    <Dialog open={open} onOpenChange={handleDialogClose}>
+      <DialogContent className="max-w-lg w-full">
+        <div className="flex items-center gap-2 mb-4">
+          <Avatar className="w-8 h-8">
+            <AvatarImage src={selectedPost?.user?.profilePic} />
+          </Avatar>
+          <span className="font-semibold text-sm">{selectedPost?.user?.username}</span>
+        </div>
+        <div className="mb-4">
+          <span className="text-base font-medium">{selectedPost?.caption}</span>
+        </div>
+        <div className="mb-4 max-h-40 overflow-y-auto">
+          {selectedPost?.comments?.map((c, idx) => (
+            <div key={idx} className="flex items-center gap-2 mb-2">
+              <Avatar className="w-6 h-6">
+                <AvatarImage src={c.user?.profilePic} />
+              </Avatar>
+              <span className="font-semibold text-xs">{c.user?.username}</span>
+              <span className="text-xs">{c.text}</span>
             </div>
-            <hr />
-            <div className="flex-1 overflow-y-auto max-h-96 p-4">
-              {comment.map((comment) => (
-                <Comment key={comment._id} comment={comment} />
-              ))}
-            </div>
-            <div className="p-4">
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={text}
-                  onChange={changeEventHandler}
-                  placeholder="Add a comment..."
-                  className="w-full outline-none border text-sm border-gray-300 p-2 rounded"
-                />
-                <Button
-                  disabled={!text.trim()}
-                  onClick={sendMessageHandler}
-                  variant="outline"
-                >
-                  Send
-                </Button>
-              </div>
-            </div>
-          </div>
+          ))}
+        </div>
+        <div className="flex flex-col gap-2">
+          <Textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Add a comment..."
+            className="resize-none"
+            rows={2}
+            disabled={loading}
+          />
+          <Button onClick={handleAddComment} disabled={loading || !comment.trim()}>
+            {loading ? "Adding..." : "Add Comment"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

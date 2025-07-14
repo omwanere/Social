@@ -80,7 +80,7 @@ const EditProfile = () => {
     <div className="flex max-w-2xl mx-auto pl-10">
       <section className="flex flex-col gap-6 w-full my-8">
         <h1 className="font-bold text-xl">Edit Profile</h1>
-        <div className="flex items-center justify-between bg-gray-100 rounded-xl p-4">
+        <div className="flex items-center justify-between bg-card rounded-xl p-4">
           <div className="flex items-center gap-3">
             <Avatar>
               <AvatarImage src={user?.profilePicture} alt="post_image" />

@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/AuthSlice";
+import ThemeToggle from "./ThemeToggle";
 
 const Login = () => {
   const [input, setInput] = useState({
@@ -59,7 +60,8 @@ const Login = () => {
     }
   }, []);
   return (
-    <div className="flex items-center w-screen h-screen justify-center">
+    <div className="flex items-center w-screen h-screen justify-center relative">
+      <ThemeToggle floating />
       <form
         onSubmit={signupHandler}
         className="shadow-lg flex flex-col gap-5 p-8"

@@ -10,6 +10,8 @@ import { persistStore } from "redux-persist";
 
 let persistor = persistStore(store);
 
+document.documentElement.classList.add('dark');
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>

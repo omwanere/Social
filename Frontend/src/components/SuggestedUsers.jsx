@@ -59,7 +59,7 @@ const SuggestedUsers = () => {
               </div>
             </div>
             <button
-              className={`text-xs font-bold cursor-pointer px-3 py-1 rounded ${isFollowing ? "bg-gray-200 text-gray-700" : "bg-[#3BADF8] text-white"} ${loadingId === suggestedUser._id ? "opacity-50" : ""}`}
+              className={`text-xs font-bold cursor-pointer px-3 py-1 rounded ${isFollowing ? "bg-muted text-foreground" : "bg-[#3BADF8] text-white"} ${loadingId === suggestedUser._id ? "opacity-50" : ""}`}
               disabled={loadingId === suggestedUser._id}
               onClick={() => handleFollow(suggestedUser._id, isFollowing)}
             >

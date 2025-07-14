@@ -227,7 +227,7 @@ const Post = ({ post }) => {
           placeholder="Add a comment..."
           value={text}
           onChange={changeEventHandler}
-          className="outline-none text-sm w-full"
+          className="w-full outline-none text-sm border border-border bg-input text-foreground placeholder:text-muted-foreground p-2 rounded"
         />
         {text && (
           <span

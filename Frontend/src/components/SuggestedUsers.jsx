@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import axios from "axios";
 import { toast } from "sonner";
 import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
-
+axios.defaults.withCredentials = true;
 const SuggestedUsers = () => {
   const { suggestedUsers, user } = useSelector((store) => store.auth);
   const [loadingId, setLoadingId] = useState(null);

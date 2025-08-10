@@ -8,7 +8,7 @@ import { MessageCircleCode } from "lucide-react";
 import Messages from "./Messages";
 import axios from "axios";
 import { setMessages } from "@/redux/chatSlice";
-
+axios.defaults.withCredentials = true;
 const ChatPage = () => {
   const [textMessage, setTextMessage] = useState("");
   const { user, suggestedUsers, selectedUser } = useSelector(

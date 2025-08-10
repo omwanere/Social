@@ -9,7 +9,7 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 import { setPosts } from "../redux/postSlice";
 import { clearLikeNotifications } from "../redux/rtnSlice";
 import axios from "axios";
-
+axios.defaults.withCredentials = true;
 const CommentDialog = ({ open, onOpenChange, selectedPost }) => {
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.post);

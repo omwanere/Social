@@ -12,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { clearLikeNotifications } from "@/redux/rtnSlice";
 import ThemeToggle from "./ThemeToggle";
-
+axios.defaults.withCredentials = true;
 const LeftSidebar = () => {
   const navigate = useNavigate();
   const { user } = useSelector((store) => store.auth);

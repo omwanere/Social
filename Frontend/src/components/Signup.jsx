@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import ThemeToggle from "./ThemeToggle";
-
+axios.defaults.withCredentials = true;
 const Signup = () => {
   const [input, setInput] = useState({
     username: "",

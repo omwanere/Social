@@ -10,7 +10,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import { Badge } from "./ui/badge";
-
+axios.defaults.withCredentials = true;
 const Post = ({ post }) => {
   const [text, setText] = useState("");
   const [open, setOpen] = useState(false);

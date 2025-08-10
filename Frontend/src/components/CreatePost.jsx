@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "@/redux/postSlice";
-
+axios.defaults.withCredentials = true;
 const CreatePost = ({ open, setOpen }) => {
   const imageRef = useRef();
   const [file, setFile] = useState("");

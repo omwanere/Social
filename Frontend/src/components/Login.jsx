@@ -8,7 +8,7 @@ import { Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/AuthSlice";
 import ThemeToggle from "./ThemeToggle";
-
+axios.defaults.withCredentials = true;
 const Login = () => {
   const [input, setInput] = useState({
     email: "",

@@ -52,12 +52,6 @@ app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 
-// ✅ Serve frontend build if backend is on same hosting
-app.use(express.static(path.join(__dirname, "/frontend/dist")));
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-});
-
 server.listen(PORT, () => {
   connectDB();
   console.log(`🚀 Server running at port ${PORT}`);

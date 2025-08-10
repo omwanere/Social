@@ -27,24 +27,32 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+// ✅ Add both frontend origins + handle deployment URL from .env
 const allowedOrigins = [
-  "https://social-frontend-omwaneres-projects.vercel.app/",
+  process.env.VITE_BACKEND_BASEURL, // from your .env for easy change
+  "https://social-frontend-omwaneres-projects.vercel.app",
   "https://social-frontend-three-sandy.vercel.app",
 ];
 
 const corsOptions = {
-  origin:
-    process.env.URL ||
-    "https://social-frontend-three-sandy.vercel.app/" ||
-    "https://social-frontend-omwaneres-projects.vercel.app/",
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`❌ CORS blocked for origin: ${origin}`);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 };
+
 app.use(cors(corsOptions));
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 
+// ✅ Serve frontend build if backend is on same hosting
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
@@ -52,5 +60,5 @@ app.get("*", (req, res) => {
 
 server.listen(PORT, () => {
   connectDB();
-  console.log(`Server listen at port ${PORT}`);
+  console.log(`🚀 Server running at port ${PORT}`);
 });

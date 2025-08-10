@@ -1,5 +1,10 @@
 import { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "./redux/AuthSlice";
 import { setOnlineUsers } from "./redux/chatSlice";
@@ -32,7 +37,7 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      const socketio = io("http://localhost:8000", {
+      const socketio = io("process.env.BACKEND_BASEURL", {
         withCredentials: true,
       });
       setSocket(socketio);
@@ -53,13 +58,47 @@ function App() {
       <Router>
         <Routes>
           <Route element={<MainLayout />}>
-            <Route path="/" element={<ProtectedRoutes><Home /></ProtectedRoutes>} />
-            <Route path="/profile/:id" element={<ProtectedRoutes><Profile /></ProtectedRoutes>} />
-            <Route path="/messages" element={<ProtectedRoutes><Messages /></ProtectedRoutes>} />
-            <Route path="/chat/:id" element={<ProtectedRoutes><ChatPage /></ProtectedRoutes>} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoutes>
+                  <Home />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/profile/:id"
+              element={
+                <ProtectedRoutes>
+                  <Profile />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoutes>
+                  <Messages />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/chat/:id"
+              element={
+                <ProtectedRoutes>
+                  <ChatPage />
+                </ProtectedRoutes>
+              }
+            />
           </Route>
-          <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-          <Route path="/signup" element={user ? <Navigate to="/" /> : <Signup />} />
+          <Route
+            path="/login"
+            element={user ? <Navigate to="/" /> : <Login />}
+          />
+          <Route
+            path="/signup"
+            element={user ? <Navigate to="/" /> : <Signup />}
+          />
         </Routes>
         <Toaster position="top-center" richColors />
       </Router>

@@ -1,10 +1,4 @@
-import {
-  Heart,
-  Home,
-  LogOut,
-  MessageCircle,
-  PlusSquare,
-} from "lucide-react";
+import { Heart, Home, LogOut, MessageCircle, PlusSquare } from "lucide-react";
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { toast } from "sonner";
@@ -30,9 +24,12 @@ const LeftSidebar = () => {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/v1/user/logout", {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        "process.env.BACKEND_BASEURL/api/v1/user/logout",
+        {
+          withCredentials: true,
+        }
+      );
       if (res.data.success) {
         dispatch(setAuthUser(null));
         dispatch(setSelectedPost(null));
@@ -91,9 +88,11 @@ const LeftSidebar = () => {
                 <span>{item.text}</span>
                 {item.text === "Notifications" &&
                   likeNotification.length > 0 && (
-                    <Popover onOpenChange={(open) => {
-                      if (!open) dispatch(clearLikeNotifications());
-                    }}>
+                    <Popover
+                      onOpenChange={(open) => {
+                        if (!open) dispatch(clearLikeNotifications());
+                      }}
+                    >
                       <PopoverTrigger asChild>
                         <Button
                           size="icon"

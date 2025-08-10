@@ -10,7 +10,9 @@ const useGetUserProfile = (userId) => {
     const fetchUserProfile = async () => {
       try {
         const res = await axios.get(
-          `process.env.BACKEND_BASEURL/api/v1/user/${userId}/profile`,
+          `${
+            import.meta.env.VITE_BACKEND_BASEURL
+          }/api/v1/user/${userId}/profile`,
           { withCredentials: true }
         );
         if (res.data.success) {

@@ -14,7 +14,9 @@ const SuggestedUsers = () => {
     try {
       setLoadingId(suggestedUserId);
       const res = await axios.post(
-        `process.env.BACKEND_BASEURL/api/v1/user/follow/${suggestedUserId}`,
+        `process.${
+          import.meta.env.VITE_BACKEND_BASEURL
+        }/api/v1/user/follow/${suggestedUserId}`,
         {},
         { withCredentials: true }
       );

@@ -20,7 +20,9 @@ const ChatPage = () => {
   const sendMessageHandler = async (receiverId) => {
     try {
       const res = await axios.post(
-        `process.env.BACKEND_BASEURL/api/v1/message/send/${receiverId}`,
+        `${
+          import.meta.env.VITE_BACKEND_BASEURL
+        }/api/v1/message/send/${receiverId}`,
         { textMessage },
         {
           headers: {

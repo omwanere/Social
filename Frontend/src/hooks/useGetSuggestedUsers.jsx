@@ -9,7 +9,7 @@ const useGetSuggestedUsers = () => {
     const fetchSuggestedUsers = async () => {
       try {
         const res = await axios.get(
-          "process.env.BACKEND_BASEURL/api/v1/user/suggested",
+          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/user/suggested`,
           { withCredentials: true }
         );
         if (res.data.success) {

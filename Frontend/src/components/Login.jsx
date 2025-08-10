@@ -28,7 +28,7 @@ const Login = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "process.env.BACKEND_BASEURL/api/v1/user/login",
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/user/login`,
         input,
         {
           headers: {

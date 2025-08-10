@@ -37,7 +37,7 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      const socketio = io("process.env.BACKEND_BASEURL", {
+      const socketio = io(`${import.meta.env.VITE_BACKEND_BASEURL}`, {
         withCredentials: true,
       });
       setSocket(socketio);

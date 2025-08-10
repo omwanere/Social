@@ -22,7 +22,9 @@ const CommentDialog = ({ open, onOpenChange, selectedPost }) => {
     setLoading(true);
     try {
       const res = await axios.post(
-        `process.env.BACKEND_BASEURL/api/v1/post/${selectedPost?._id}/comment`,
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/post/${
+          selectedPost?._id
+        }/comment`,
         { text: comment },
         { withCredentials: true }
       );

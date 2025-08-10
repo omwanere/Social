@@ -15,19 +15,28 @@ const PORT = process.env.PORT || 3000;
 
 const __dirname = path.resolve();
 
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
 });
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection:", reason);
 });
 
 //middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+
+const allowedOrigins = [
+  "https://social-frontend-omwaneres-projects.vercel.app/",
+  "https://social-frontend-three-sandy.vercel.app",
+];
+
 const corsOptions = {
-  origin: process.env.URL || "http://localhost:5173",
+  origin:
+    process.env.URL ||
+    "https://social-frontend-three-sandy.vercel.app/" ||
+    "https://social-frontend-omwaneres-projects.vercel.app/",
   credentials: true,
 };
 app.use(cors(corsOptions));

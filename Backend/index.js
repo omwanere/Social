@@ -33,6 +33,10 @@ app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 
+app.get("/", (req, res) => {
+  res.send("Backend server is running");
+});
+
 server.listen(PORT, () => {
   connectDB();
   console.log(`🚀 Server running at port ${PORT}`);

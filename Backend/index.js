@@ -27,20 +27,19 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-const allowedOrigins = [
-  "https://social-frontend-16lb75gew-omwaneres-projects.vercel.app",
-  "https://social-frontend-git-main-omwaneres-projects.vercel.app",
-  "https://social-frontend-git-main-omwaneres-projects.vercel.app",
-];
+// const allowedOrigins = [
+//   "https://social-frontend-16lb75gew-omwaneres-projects.vercel.app",
+//   "https://social-frontend-git-main-omwaneres-projects.vercel.app",
+//   "https://social-frontend-git-main-omwaneres-projects.vercel.app",
+// ];
 
 const corsOptions = {
   origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman) or any origin
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
+
+    // Reflect the request origin back in the response header
+    callback(null, origin);
   },
   credentials: true,
 };

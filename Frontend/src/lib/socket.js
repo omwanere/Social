@@ -4,22 +4,19 @@ let socket = null;
 
 export const connectSocket = (userId) => {
   if (!socket) {
-    const token = localStorage.getItem('token');
-    
-    socket = io('https://social-sabs.onrender.com', {
+    socket = io('https://social-frontend-three-sandy.vercel.app', {
       withCredentials: true,
-      auth: {
-        userId: userId,
-        token: token
-      },
       transports: ['websocket', 'polling'],
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
       timeout: 10000,
-      extraHeaders: {
-        'Authorization': `Bearer ${token}`
+      auth: {
+        token: document.cookie
+          .split('; ')
+          .find(row => row.startsWith('token='))
+          ?.split('=')[1]
       }
     });
 
@@ -29,6 +26,10 @@ export const connectSocket = (userId) => {
 
     socket.on('connect', () => {
       console.log('Socket connected');
+      // Authenticate socket after connection
+      if (token) {
+        socket.emit('authenticate', token);
+      }
     });
 
     socket.on('disconnect', (reason) => {

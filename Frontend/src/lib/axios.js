@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.VITE_BACKEND_BASEURL || 'https://social-sabs.onrender.com',
+  baseURL: process.env.VITE_BACKEND_BASEURL || 'https://social-frontend-three-sandy.vercel.app/api/v1',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

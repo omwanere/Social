@@ -27,7 +27,6 @@ axios.defaults.withCredentials = true;
 function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const socket = useSocket();
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -35,24 +34,6 @@ function App() {
       dispatch(setAuthUser(storedUser));
     }
   }, [dispatch]);
-
-  // Socket event handlers
-  useEffect(() => {
-    if (socket) {
-      socket.on("getOnlineUsers", (users) => {
-        dispatch(setOnlineUsers(users));
-      });
-
-      socket.on("likeNotification", (data) => {
-        dispatch(setLikeNotification(data));
-      });
-
-      return () => {
-        socket.off("getOnlineUsers");
-        socket.off("likeNotification");
-      };
-    }
-  }, [socket, dispatch]);
 
   return (
     <SocketProvider>

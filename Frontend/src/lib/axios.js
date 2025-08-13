@@ -8,19 +8,8 @@ const api = axios.create({
   }
 });
 
-// Add a request interceptor to include the token in headers
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// Remove the token interceptor since we're using cookie-based auth
+// The token is stored in an HTTP-only cookie by the backend
 
 // Add a response interceptor to handle errors
 api.interceptors.response.use(

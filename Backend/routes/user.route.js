@@ -15,6 +15,20 @@ const router = express.Router();
 router.route("/register").post(register);
 router.route("/login").post(login);
 router.route("/logout").get(logout);
+router.route("/me").get(isAuthenticated, (req, res) => {
+  res.json({
+    success: true,
+    user: {
+      _id: req.user._id,
+      username: req.user.username,
+      email: req.user.email,
+      profilePicture: req.user.profilePicture,
+      bio: req.user.bio,
+      followers: req.user.followers,
+      following: req.user.following,
+    }
+  });
+});
 router.route("/:id/profile").get(isAuthenticated, getProfile);
 router
   .route("/profile/edit")

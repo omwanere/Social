@@ -28,19 +28,29 @@ function App() {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      dispatch(setAuthUser(storedUser));
+    // Check if we have a valid cookie and user data
+    if (!user) {
+      // Try to fetch user data from the backend
+      api.get('/api/v1/user/me')
+        .then(res => {
+          if (res.data.success) {
+            dispatch(setAuthUser(res.data.user));
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        });
     }
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   return (
     <SocketProvider>
       <Router>
         <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />} />
           <Route element={<MainLayout />}>
             <Route
-              path="/"
+              path="/home"
               element={
                 <ProtectedRoutes>
                   <Home />
@@ -72,10 +82,10 @@ function App() {
               }
             />
           </Route>
-          <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+          <Route path="/login" element={user ? <Navigate to="/home" replace /> : <Login />} />
           <Route
             path="/signup"
-            element={user ? <Navigate to="/" /> : <Signup />}
+            element={user ? <Navigate to="/home" replace /> : <Signup />}
           />
         </Routes>
         <Toaster position="top-center" richColors />

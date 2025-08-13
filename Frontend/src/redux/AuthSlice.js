@@ -7,10 +7,16 @@ const authSlice = createSlice({
     suggestedUsers: [],
     userProfile: null,
     selectedUser: null,
+    isAuthenticated: false,
   },
   reducers: {
     setAuthUser: (state, action) => {
       state.user = action.payload;
+      state.isAuthenticated = true;
+    },
+    clearAuth: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
     },
     setSuggestedUsers: (state, action) => {
       state.suggestedUsers = action.payload;

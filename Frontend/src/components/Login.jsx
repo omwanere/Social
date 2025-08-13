@@ -28,8 +28,6 @@ const Login = () => {
       setLoading(true);
       const res = await api.post("/api/v1/user/login", input);
       if (res.data.success) {
-        // Store the token in localStorage
-        localStorage.setItem("token", res.data.token);
         dispatch(setAuthUser(res.data.user));
         navigate("/home");
         toast.success(res.data.message);

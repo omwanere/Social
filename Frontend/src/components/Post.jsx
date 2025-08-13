@@ -10,7 +10,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import { Badge } from "./ui/badge";
-axios.defaults.withCredentials = true;
+import api from "@/lib/axios";
 const Post = ({ post }) => {
   const [text, setText] = useState("");
   const [open, setOpen] = useState(false);
@@ -66,7 +66,7 @@ const Post = ({ post }) => {
 
   const commentHandler = async () => {
     try {
-      const res = await axios.post(
+      const res = await api.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/post/${
           post._id
         }/comment`,
@@ -98,7 +98,7 @@ const Post = ({ post }) => {
 
   const deletePostHandler = async () => {
     try {
-      const res = await axios.delete(
+      const res = await api.delete(
         `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/post/delete/${
           post?._id
         }`,

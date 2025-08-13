@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import axios from "axios";
 import { toast } from "sonner";
 import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
-axios.defaults.withCredentials = true;
+import api from "@/lib/axios";
 const SuggestedUsers = () => {
   const { suggestedUsers, user } = useSelector((store) => store.auth);
   const [loadingId, setLoadingId] = useState(null);
@@ -13,7 +13,7 @@ const SuggestedUsers = () => {
   const handleFollow = async (suggestedUserId, isFollowing) => {
     try {
       setLoadingId(suggestedUserId);
-      const res = await axios.post(
+      const res = await api.post(
         `process.${
           import.meta.env.VITE_BACKEND_BASEURL
         }/api/v1/user/follow/${suggestedUserId}`,

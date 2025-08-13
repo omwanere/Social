@@ -9,7 +9,7 @@ import { Badge } from "./ui/badge";
 import { AtSign, Heart, MessageCircle } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
-axios.defaults.withCredentials = true;
+import api from "@/lib/axios";
 const Profile = () => {
   const params = useParams();
   const userId = params.id;
@@ -27,7 +27,7 @@ const Profile = () => {
 
   const followHandler = async () => {
     try {
-      const res = await axios.post(
+      const res = await api.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/user/follow/${
           userProfile?._id
         }`,

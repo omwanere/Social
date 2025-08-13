@@ -7,7 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import ThemeToggle from "./ThemeToggle";
-axios.defaults.withCredentials = true;
 const Signup = () => {
   const [input, setInput] = useState({
     username: "",
@@ -26,7 +25,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await api.post('/api/v1/user/register', input);
+      const res = await api.post("/api/v1/user/register", input);
       if (res.data.success) {
         navigate("/login");
         toast.success(res.data.message);

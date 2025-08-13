@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store.js";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
-import axios from "axios";
+//ort axios from "axios";
 
 let persistor = persistStore(store);
 

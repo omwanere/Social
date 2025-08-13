@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import axios from "axios";
 import { toast } from "sonner";
 import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
 import api from "@/lib/axios";

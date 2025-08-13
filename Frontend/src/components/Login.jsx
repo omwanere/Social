@@ -8,7 +8,6 @@ import { Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/AuthSlice";
 import ThemeToggle from "./ThemeToggle";
-axios.defaults.withCredentials = true;
 const Login = () => {
   const [input, setInput] = useState({
     email: "",
@@ -27,10 +26,10 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await api.post('/api/v1/user/login', input);
+      const res = await api.post("/api/v1/user/login", input);
       if (res.data.success) {
         // Store the token in localStorage
-        localStorage.setItem('token', res.data.token);
+        localStorage.setItem("token", res.data.token);
         dispatch(setAuthUser(res.data.user));
         navigate("/");
         toast.success(res.data.message);

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { AtSign, Heart, MessageCircle } from "lucide-react";
-import axios from "axios";
+//import axios from "axios";
 import { toast } from "sonner";
 import api from "@/lib/axios";
 const Profile = () => {

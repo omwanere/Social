@@ -9,10 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "./redux/AuthSlice";
 import { setOnlineUsers } from "./redux/chatSlice";
 import { setLikeNotification } from "./redux/rtnSlice";
-import { io } from "socket.io-client";
 import { Toaster } from "sonner";
-import { SocketContext } from "./lib/SocketContext";
-import { useState } from "react";
+import { SocketProvider, useSocket } from "./lib/SocketContext";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -24,10 +22,11 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 import "./index.css";
 import axios from "axios";
 axios.defaults.withCredentials = true;
-function App() {
+
+const AppInner = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
-  const [socket, setSocket] = useState(null);
+  const { user } = useSelector((state => state.auth));
+  const socket = useSocket();
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -36,75 +35,79 @@ function App() {
     }
   }, [dispatch]);
 
+  // Socket event handlers
   useEffect(() => {
-    if (user) {
-      const socketio = io(`${import.meta.env.VITE_BACKEND_BASEURL}`, {
-        withCredentials: true,
-      });
-      setSocket(socketio);
-      socketio.on("getOnlineUsers", (users) => {
+    if (socket) {
+      socket.on("getOnlineUsers", (users) => {
         dispatch(setOnlineUsers(users));
       });
-      socketio.on("likeNotification", (data) => {
+
+      socket.on("likeNotification", (data) => {
         dispatch(setLikeNotification(data));
       });
+
       return () => {
-        socketio.disconnect();
+        socket.off("getOnlineUsers");
+        socket.off("likeNotification");
       };
     }
-  }, [user, dispatch]);
+  }, [socket, dispatch]);
 
   return (
-    <SocketContext.Provider value={socket}>
-      <Router>
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route
-              path="/"
-              element={
-                <ProtectedRoutes>
-                  <Home />
-                </ProtectedRoutes>
-              }
-            />
-            <Route
-              path="/profile/:id"
-              element={
-                <ProtectedRoutes>
-                  <Profile />
-                </ProtectedRoutes>
-              }
-            />
-            <Route
-              path="/messages"
-              element={
-                <ProtectedRoutes>
-                  <Messages />
-                </ProtectedRoutes>
-              }
-            />
-            <Route
-              path="/chat/:id"
-              element={
-                <ProtectedRoutes>
-                  <ChatPage />
-                </ProtectedRoutes>
-              }
-            />
-          </Route>
+    <Router>
+      <Routes>
+        <Route element={<MainLayout />}>
           <Route
-            path="/login"
-            element={user ? <Navigate to="/" /> : <Login />}
+            path="/"
+            element={
+              <ProtectedRoutes>
+                <Home />
+              </ProtectedRoutes>
+            }
           />
           <Route
-            path="/signup"
-            element={user ? <Navigate to="/" /> : <Signup />}
+            path="/profile/:id"
+            element={
+              <ProtectedRoutes>
+                <Profile />
+              </ProtectedRoutes>
+            }
           />
-        </Routes>
-        <Toaster position="top-center" richColors />
-      </Router>
-    </SocketContext.Provider>
+          <Route
+            path="/messages"
+            element={
+              <ProtectedRoutes>
+                <Messages />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/chat/:id"
+            element={
+              <ProtectedRoutes>
+                <ChatPage />
+              </ProtectedRoutes>
+            }
+          />
+        </Route>
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" /> : <Login />}
+        />
+        <Route
+          path="/signup"
+          element={user ? <Navigate to="/" /> : <Signup />}
+        />
+      </Routes>
+      <Toaster position="top-center" richColors />
+    </Router>
   );
-}
+};
 
-export default App;
+const App = () => (
+  <SocketProvider>
+    <AppInner />
+  </SocketProvider>
+);
+
+export default AppWithProvider;

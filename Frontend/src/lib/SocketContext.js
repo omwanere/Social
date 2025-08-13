@@ -1,4 +1,25 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect } from "react";
+import { connectSocket, disconnectSocket } from './socket';
 
-export const SocketContext = createContext(null);
-export const useSocket = () => useContext(SocketContext); 
+const SocketContext = createContext(null);
+
+export const SocketProvider = ({ children }) => {
+  const userId = localStorage.getItem('userId');
+  const token = localStorage.getItem('token');
+  let socket;
+
+  useEffect(() => {
+    if (userId && token) {
+      socket = connectSocket(userId);
+      return () => disconnectSocket();
+    }
+  }, [userId, token]);
+
+  return (
+    <SocketContext.Provider value={socket}>
+      {children}
+    </SocketContext.Provider>
+  );
+};
+
+export const useSocket = () => useContext(SocketContext);

@@ -24,7 +24,7 @@ import axios from "axios";
 import { AppWindowIcon } from "lucide-react";
 axios.defaults.withCredentials = true;
 
-const AppInner = () => {
+function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const socket = useSocket();
@@ -55,57 +55,53 @@ const AppInner = () => {
   }, [socket, dispatch]);
 
   return (
-    <Router>
-      <Routes>
-        <Route element={<MainLayout />}>
+    <SocketProvider>
+      <Router>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoutes>
+                  <Home />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/profile/:id"
+              element={
+                <ProtectedRoutes>
+                  <Profile />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoutes>
+                  <Messages />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/chat/:id"
+              element={
+                <ProtectedRoutes>
+                  <ChatPage />
+                </ProtectedRoutes>
+              }
+            />
+          </Route>
+          <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
           <Route
-            path="/"
-            element={
-              <ProtectedRoutes>
-                <Home />
-              </ProtectedRoutes>
-            }
+            path="/signup"
+            element={user ? <Navigate to="/" /> : <Signup />}
           />
-          <Route
-            path="/profile/:id"
-            element={
-              <ProtectedRoutes>
-                <Profile />
-              </ProtectedRoutes>
-            }
-          />
-          <Route
-            path="/messages"
-            element={
-              <ProtectedRoutes>
-                <Messages />
-              </ProtectedRoutes>
-            }
-          />
-          <Route
-            path="/chat/:id"
-            element={
-              <ProtectedRoutes>
-                <ChatPage />
-              </ProtectedRoutes>
-            }
-          />
-        </Route>
-        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-        <Route
-          path="/signup"
-          element={user ? <Navigate to="/" /> : <Signup />}
-        />
-      </Routes>
-      <Toaster position="top-center" richColors />
-    </Router>
+        </Routes>
+        <Toaster position="top-center" richColors />
+      </Router>
+    </SocketProvider>
   );
-};
-
-const App = () => (
-  <SocketProvider>
-    <AppInner />
-  </SocketProvider>
-);
+}
 
 export default App;

@@ -25,11 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: [
-      "https://social-frontend-three-sandy.vercel.app",
-      "https://social-frontend-omwaneres-projects.vercel.app",
-      "https://social-frontend-omwaneres-projects.vercel.app",
-    ],
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],

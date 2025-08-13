@@ -1,6 +1,6 @@
 import { setMessages } from "@/redux/chatSlice";
 import { setPosts } from "@/redux/postSlice";
-import axios from "axios";
+import api from "@/lib/axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,7 +10,7 @@ const useGetAllMessage = () => {
   useEffect(() => {
     const fetchAllMessage = async () => {
       try {
-        const res = await axios.get(
+        const res = await api.get(
           `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/message/all/${
             selectedUser?._id
           }`,

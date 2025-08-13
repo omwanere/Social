@@ -8,8 +8,7 @@ import { Textarea } from "./ui/textarea";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { setPosts } from "../redux/postSlice";
 import { clearLikeNotifications } from "../redux/rtnSlice";
-import axios from "axios";
-axios.defaults.withCredentials = true;
+import api from "@/lib/axios";
 const CommentDialog = ({ open, onOpenChange, selectedPost }) => {
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.post);
@@ -21,7 +20,7 @@ const CommentDialog = ({ open, onOpenChange, selectedPost }) => {
     if (!comment.trim()) return;
     setLoading(true);
     try {
-      const res = await axios.post(
+      const res = await api.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/post/${
           selectedPost?._id
         }/comment`,

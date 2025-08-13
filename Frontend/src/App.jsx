@@ -10,7 +10,7 @@ import { setAuthUser } from "./redux/AuthSlice";
 import { setOnlineUsers } from "./redux/chatSlice";
 import { setLikeNotification } from "./redux/rtnSlice";
 import { Toaster } from "sonner";
-import { SocketProvider, useSocket } from "./lib/SocketContext.js";
+import { SocketProvider, useSocket } from "./lib/SocketContext.jsx";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";

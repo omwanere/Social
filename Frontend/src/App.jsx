@@ -22,7 +22,8 @@ import Messages from "./components/Messages";
 import ChatPage from "./components/ChatPage";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import "./index.css";
-
+import axios from "axios";
+axios.defaults.withCredentials = true;
 function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);

@@ -8,7 +8,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://social-frontend-git-main-omwaneres-projects.vercel.app",
+    origin: "https://social-frontend-three-sandy.vercel.app",
     methods: ["GET", "POST"],
   },
 });

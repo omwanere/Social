@@ -12,7 +12,6 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
-// Error handlers for uncaught exceptions/rejections
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);
 });
@@ -20,25 +19,31 @@ process.on("unhandledRejection", (reason, promise) => {
   console.error("Unhandled Rejection:", reason);
 });
 
-// Middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-// Enable CORS for all origins, no credentials support
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://social-frontend-three-sandy.vercel.app",
+      "https://social-frontend-omwaneres-projects.vercel.app",
+      "https://social-frontend-omwaneres-projects.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
-// API routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 
-// Root route
 app.get("/", (req, res) => {
   res.send("Backend server is running");
 });
 
-// Start server and connect DB
 server.listen(PORT, () => {
   connectDB();
   console.log(`🚀 Server running at port ${PORT}`);

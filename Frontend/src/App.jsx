@@ -20,9 +20,8 @@ import Messages from "./components/Messages";
 import ChatPage from "./components/ChatPage";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import "./index.css";
-import axios from "axios";
 import { AppWindowIcon } from "lucide-react";
-axios.defaults.withCredentials = true;
+import api from "./lib/axios";
 
 function App() {
   const dispatch = useDispatch();

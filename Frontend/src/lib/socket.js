@@ -4,10 +4,13 @@ let socket = null;
 
 export const connectSocket = (userId) => {
   if (!socket) {
+    const token = localStorage.getItem('token');
+    
     socket = io('https://social-sabs.onrender.com', {
       withCredentials: true,
       auth: {
-        userId: userId
+        userId: userId,
+        token: token
       },
       transports: ['websocket', 'polling'],
       reconnection: true,
@@ -16,7 +19,7 @@ export const connectSocket = (userId) => {
       reconnectionDelayMax: 5000,
       timeout: 10000,
       extraHeaders: {
-        'Authorization': localStorage.getItem('token')
+        'Authorization': `Bearer ${token}`
       }
     });
 
@@ -30,6 +33,14 @@ export const connectSocket = (userId) => {
 
     socket.on('disconnect', (reason) => {
       console.log('Socket disconnected:', reason);
+    });
+
+    socket.on('error', (error) => {
+      console.error('Socket error:', error);
+    });
+
+    socket.on('connect_timeout', (timeout) => {
+      console.error('Socket connection timeout:', timeout);
     });
   }
 

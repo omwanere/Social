@@ -1,3 +1,4 @@
+import React from "react";
 import { createContext, useContext, useEffect } from "react";
 import { connectSocket, disconnectSocket } from './socket';
 
@@ -15,10 +16,10 @@ export const SocketProvider = ({ children }) => {
     }
   }, [userId, token]);
 
-  return (
-    <SocketContext.Provider value={socket}>
-      {children}
-    </SocketContext.Provider>
+  return React.createElement(
+    SocketContext.Provider,
+    { value: socket },
+    children
   );
 };
 

@@ -31,7 +31,7 @@ const Login = () => {
         // Store the token in localStorage
         localStorage.setItem("token", res.data.token);
         dispatch(setAuthUser(res.data.user));
-        navigate("/");
+        navigate("/home");
         toast.success(res.data.message);
         setInput({
           email: "",
@@ -40,7 +40,13 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
+      if (error.response?.status === 404) {
+        toast.error("Server not found. Please try again later.");
+      } else if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
     } finally {
       setLoading(false);
     }

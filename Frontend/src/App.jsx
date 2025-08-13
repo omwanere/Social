@@ -10,7 +10,7 @@ import { setAuthUser } from "./redux/AuthSlice";
 import { setOnlineUsers } from "./redux/chatSlice";
 import { setLikeNotification } from "./redux/rtnSlice";
 import { Toaster } from "sonner";
-import { SocketProvider, useSocket } from "./lib/SocketContext.jsx";
+import { SocketProvider, useSocket } from "./lib/SocketContext.js";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
@@ -25,7 +25,7 @@ axios.defaults.withCredentials = true;
 
 const AppInner = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state => state.auth));
+  const { user } = useSelector((state) => state.auth);
   const socket = useSocket();
 
   useEffect(() => {
@@ -90,10 +90,7 @@ const AppInner = () => {
             }
           />
         </Route>
-        <Route
-          path="/login"
-          element={user ? <Navigate to="/" /> : <Login />}
-        />
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route
           path="/signup"
           element={user ? <Navigate to="/" /> : <Signup />}

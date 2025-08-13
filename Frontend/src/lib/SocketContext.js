@@ -1,12 +1,12 @@
 import React from "react";
 import { createContext, useContext, useEffect } from "react";
-import { connectSocket, disconnectSocket } from './socket';
+import { connectSocket, disconnectSocket } from "./socket";
 
 const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
-  const userId = localStorage.getItem('userId');
-  const token = localStorage.getItem('token');
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
   let socket;
 
   useEffect(() => {

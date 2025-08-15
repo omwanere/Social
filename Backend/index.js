@@ -15,11 +15,11 @@ const PORT = process.env.PORT || 3000;
 
 const __dirname = path.resolve();
 
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
 });
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection:", reason);
 });
 
 //middlewares
@@ -27,10 +27,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 const corsOptions = {
-  origin: process.env.URL || "http://localhost:5173",
+  origin: "http://localhost:5173",
   credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
 };
+
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);

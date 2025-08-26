@@ -26,9 +26,18 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await api.post("/api/v1/user/login", input);
+      const res = await api.post("/user/login", input, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
       if (res.data.success) {
-        dispatch(setAuthUser(res.data.user));
+        // The server should set the httpOnly cookie
+        // Store only necessary user data in the state
+        const { password, ...userData } = res.data.user;
+        dispatch(setAuthUser(userData));
         navigate("/home");
         toast.success(res.data.message);
         setInput({

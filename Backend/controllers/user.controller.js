@@ -85,10 +85,11 @@ export const login = async (req, res) => {
     return res
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         path: "/",
-        secure: false,
-        maxAge: 1 * 24 * 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+        domain: process.env.NODE_ENV === 'production' ? '.social-nlhq.onrender.com' : undefined
       })
       .json({
         message: `Welcome back ${user.username}`,
@@ -101,12 +102,25 @@ export const login = async (req, res) => {
 };
 export const logout = async (_, res) => {
   try {
-    return res.cookie("token", "", { maxAge: 0 }).json({
-      message: "Logged out successfully.",
-      success: true,
-    });
+    return res
+      .cookie("token", "", {
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: "/",
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 0,
+        domain: process.env.NODE_ENV === 'production' ? '.social-nlhq.onrender.com' : undefined
+      })
+      .json({
+        message: "Logged out successfully.",
+        success: true,
+      });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      message: "Error logging out",
+      success: false,
+    });
   }
 };
 export const getProfile = async (req, res) => {

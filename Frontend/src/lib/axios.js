@@ -1,11 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.VITE_BACKEND_BASEURL || 'https://social-frontend-three-sandy.vercel.app/api/v1',
+  baseURL:
+    process.env.VITE_BACKEND_BASEURL ||
+    "https://social-nlhq.onrender.com/api/v1",
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
-  }
+    "Content-Type": "application/json",
+  },
 });
 
 // Remove the token interceptor since we're using cookie-based auth
@@ -17,7 +19,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Handle unauthorized error (e.g., redirect to login)
-      window.location.href = '/login';
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }

@@ -26,14 +26,18 @@ process.on("unhandledRejection", (reason, promise) => {
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-const allowedOrigins = ["http://localhost:5173", "http://127.0.0.1:5173"];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "https://sociial.netlify.app",
+];
 
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
@@ -47,11 +51,13 @@ app.options("*", cors(corsOptions));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  if (err.message === 'Not allowed by CORS') {
-    return res.status(403).json({ success: false, message: 'Not allowed by CORS' });
+  if (err.message === "Not allowed by CORS") {
+    return res
+      .status(403)
+      .json({ success: false, message: "Not allowed by CORS" });
   }
-  console.error('Error:', err);
-  res.status(500).json({ success: false, message: 'Internal Server Error' });
+  console.error("Error:", err);
+  res.status(500).json({ success: false, message: "Internal Server Error" });
 });
 
 app.use("/api/v1/user", userRoute);

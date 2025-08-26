@@ -8,9 +8,13 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    origin: [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "https://sociial.netlify.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true
+    credentials: true,
   },
   pingTimeout: 60000, // 60 seconds
   pingInterval: 25000, // 25 seconds
@@ -27,14 +31,14 @@ export const getReceiverSocketId = (receiverId) => userSocketMap[receiverId];
 
 // Handle connection errors
 io.engine.on("connection_error", (err) => {
-  console.error('Socket connection error:', err);
+  console.error("Socket connection error:", err);
 });
 
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
-  
+
   if (!userId) {
-    console.warn('Socket connected without userId');
+    console.warn("Socket connected without userId");
     return socket.disconnect(true);
   }
 
@@ -56,7 +60,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", (reason) => {
     console.log(`Socket ${socket.id} disconnected. Reason: ${reason}`);
     const disconnectedUserId = userSocketIds.get(socket.id);
-    
+
     if (disconnectedUserId && userSocketMap[disconnectedUserId] === socket.id) {
       delete userSocketMap[disconnectedUserId];
       userSocketIds.delete(socket.id);

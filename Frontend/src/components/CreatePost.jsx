@@ -36,7 +36,7 @@ const CreatePost = ({ open, setOpen }) => {
     try {
       setLoading(true);
       const res = await api.post(
-        "process.env.BACKEND_BASEURL/api/v1/post/addpost",
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/post/addpost`,
         formData,
         {
           headers: {

@@ -77,7 +77,7 @@ function SocketManager() {
     if (user) {
       // Only create new socket if it doesn't exist
       if (!socket) {
-        const socketio = io(`${import.meta.env.VITE_BACKEND_BASEURL}`, {
+        const socketio = io("https://social-nlhq.onrender.com", {
           query: {
             userId: user?._id,
           },

@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { MessageCircleCode } from "lucide-react";
 import Messages from "./Messages";
 // import axios from "axios";
-import api from "@/lib/axios";
+import api from "../api/axios";
 import { setMessages } from "@/redux/chatSlice";
 
 const ChatPage = () => {
@@ -57,7 +57,9 @@ const ChatPage = () => {
             const isOnline = onlineUsers.includes(suggestedUser?._id);
             return (
               <div
-                key={suggestedUser._id || Math.random().toString(36).substr(2, 9)}
+                key={
+                  suggestedUser._id || Math.random().toString(36).substr(2, 9)
+                }
                 onClick={() => dispatch(setSelectedUser(suggestedUser))}
                 className="flex gap-3 items-center p-3 hover:bg-gray-50 cursor-pointer"
               >

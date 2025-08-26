@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import { setPosts, setSelectedPost } from "@/redux/postSlice";
 import { Badge } from "./ui/badge";
-import api from "@/lib/axios";
+import api from "../api/axios";
 const Post = ({ post }) => {
   const [text, setText] = useState("");
   const [open, setOpen] = useState(false);

@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import api from "@/lib/axios";
+import api from "../api/axios";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";

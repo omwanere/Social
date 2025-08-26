@@ -1,5 +1,5 @@
 import { setSuggestedUsers } from "@/redux/AuthSlice";
-import api from "@/lib/axios";
+import api from "../api/axios"
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 

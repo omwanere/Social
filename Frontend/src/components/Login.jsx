@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import api from "@/lib/axios";
+import api from "../api/axios";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -29,10 +29,10 @@ const Login = () => {
       const res = await api.post("/user/login", input, {
         withCredentials: true,
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       });
-      
+
       if (res.data.success) {
         // The server should set the httpOnly cookie
         // Store only necessary user data in the state

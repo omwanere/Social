@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { toast } from "sonner";
 import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
-import api from "@/lib/axios";
+import api from "../api/axios";
 const SuggestedUsers = () => {
   const { suggestedUsers, user } = useSelector((store) => store.auth);
   const [loadingId, setLoadingId] = useState(null);
   const dispatch = useDispatch();
-  
+
   // Call the hook at the component level
   useGetSuggestedUsers();
 
@@ -26,13 +26,13 @@ const SuggestedUsers = () => {
       if (res.data.success) {
         toast.success(res.data.message);
         // Dispatch action to update the Redux store
-        dispatch({ 
-          type: 'auth/updateFollowStatus', 
-          payload: { 
+        dispatch({
+          type: "auth/updateFollowStatus",
+          payload: {
             suggestedUserId,
             currentUserId: user._id,
-            isFollowing: !isFollowing 
-          } 
+            isFollowing: !isFollowing,
+          },
         });
       }
     } catch (error) {

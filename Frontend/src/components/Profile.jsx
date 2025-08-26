@@ -9,7 +9,7 @@ import { Badge } from "./ui/badge";
 import { AtSign, Heart, MessageCircle } from "lucide-react";
 //import axios from "axios";
 import { toast } from "sonner";
-import api from "@/lib/axios";
+import api from "../api/axios";
 const Profile = () => {
   const params = useParams();
   const userId = params.id;

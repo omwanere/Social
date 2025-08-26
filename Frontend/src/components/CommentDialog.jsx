@@ -8,7 +8,7 @@ import { Textarea } from "./ui/textarea";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { setPosts } from "../redux/postSlice";
 import { clearLikeNotifications } from "../redux/rtnSlice";
-import api from "@/lib/axios";
+import api from "../api/axios";
 const CommentDialog = ({ open, onOpenChange, selectedPost }) => {
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.post);

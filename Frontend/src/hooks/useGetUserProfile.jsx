@@ -1,5 +1,5 @@
 import { setUserProfile } from "@/redux/AuthSlice";
-import api from "@/lib/axios";
+import api from "../api/axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 

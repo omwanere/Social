@@ -48,16 +48,12 @@ const EditProfile = () => {
     }
     try {
       setLoading(true);
-      const res = await api.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/user/profile/edit`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      const res = await api.post("/user/profile/edit", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
       if (res.data.success) {
         const updatedUserData = {
           ...user,

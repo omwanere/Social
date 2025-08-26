@@ -32,12 +32,9 @@ const Post = ({ post }) => {
   const likeOrDislikeHandler = async () => {
     try {
       const action = liked ? "dislike" : "like";
-      const res = await api.get(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/post/${
-          post._id
-        }/${action}`,
-        { withCredentials: true }
-      );
+      const res = await api.get("/post/${post._id}/${action}", {
+        withCredentials: true,
+      });
       console.log(res.data);
       if (res.data.success) {
         const updatedLikes = liked ? postLike - 1 : postLike + 1;
@@ -66,9 +63,7 @@ const Post = ({ post }) => {
   const commentHandler = async () => {
     try {
       const res = await api.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/post/${
-          post._id
-        }/comment`,
+        "/post/${post._id}/comment",
         { text },
         {
           headers: {
@@ -97,12 +92,9 @@ const Post = ({ post }) => {
 
   const deletePostHandler = async () => {
     try {
-      const res = await api.delete(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/post/delete/${
-          post?._id
-        }`,
-        { withCredentials: true }
-      );
+      const res = await api.delete("/post/delete/${post?._id}", {
+        withCredentials: true,
+      });
       if (res.data.success) {
         const updatedPostData = posts.filter(
           (postItem) => postItem?._id !== post?._id
@@ -118,12 +110,9 @@ const Post = ({ post }) => {
 
   const bookmarkHandler = async () => {
     try {
-      const res = await api.get(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/post/${
-          post?._id
-        }/bookmark`,
-        { withCredentials: true }
-      );
+      const res = await api.get("/post/${post?._id}/bookmark", {
+        withCredentials: true,
+      });
       if (res.data.success) {
         toast.success(res.data.message);
       }

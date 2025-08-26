@@ -21,17 +21,12 @@ const useGetAllMessage = () => {
       setError(null);
 
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/message/all/${
-            selectedUser._id
-          }`,
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const res = await axios.get("/message/all/${selectedUser._id}", {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
         if (res.data?.success) {
           dispatch(setMessages(res.data.messages || []));

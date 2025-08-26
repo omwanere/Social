@@ -21,9 +21,7 @@ const CommentDialog = ({ open, onOpenChange, selectedPost }) => {
     setLoading(true);
     try {
       const res = await api.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/post/${
-          selectedPost?._id
-        }/comment`,
+        "/post/${selectedPost?._id}/comment",
         { text: comment },
         { withCredentials: true }
       );

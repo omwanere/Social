@@ -28,9 +28,7 @@ const Profile = () => {
   const followHandler = async () => {
     try {
       const res = await api.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/user/follow/${
-          userProfile?._id
-        }`,
+        "/user/follow/${userProfile?._id}",
         {},
         { withCredentials: true }
       );

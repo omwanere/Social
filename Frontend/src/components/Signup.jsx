@@ -25,7 +25,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await api.post("/api/v1/user/register", input);
+      const res = await api.post("/user/register", input);
       if (res.data.success) {
         navigate("/login");
         toast.success(res.data.message);

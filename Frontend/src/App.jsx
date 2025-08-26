@@ -77,13 +77,13 @@ function SocketManager() {
     if (user) {
       // Only create new socket if it doesn't exist
       if (!socket) {
-        const socketio = io("http://localhost:8000", {
+        const socketio = io(`${import.meta.env.VITE_BACKEND_BASEURL}`, {
           query: {
             userId: user?._id,
           },
           transports: ["websocket"],
         });
-        
+
         // Set up event listeners
         socketio.on("getOnlineUsers", (onlineUsers) => {
           dispatch(setOnlineUsers(onlineUsers));

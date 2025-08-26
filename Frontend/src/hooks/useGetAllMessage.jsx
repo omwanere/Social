@@ -9,7 +9,7 @@ const useGetAllMessage = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { selectedUser } = useSelector((store) => store.auth || {});
-  
+
   useEffect(() => {
     const fetchAllMessage = async () => {
       if (!selectedUser?._id) {
@@ -19,23 +19,25 @@ const useGetAllMessage = () => {
 
       setLoading(true);
       setError(null);
-      
+
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/v1/message/all/${selectedUser._id}`,
-          { 
+          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/message/all/${
+            selectedUser._id
+          }`,
+          {
             withCredentials: true,
             headers: {
-              'Content-Type': 'application/json'
-            }
+              "Content-Type": "application/json",
+            },
           }
         );
-        
+
         if (res.data?.success) {
           dispatch(setMessages(res.data.messages || []));
         }
       } catch (error) {
-        console.error('Error fetching messages:', error);
+        console.error("Error fetching messages:", error);
         setError(error);
         dispatch(setMessages([]));
       } finally {

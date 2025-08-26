@@ -4,7 +4,7 @@ import store from "@/redux/store";
 
 // Create Axios instance
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1`,
+  baseURL: "https://social-nlhq.onrender.com/api/v1",
   withCredentials: true, // send cookies automatically
   headers: {
     "Content-Type": "application/json",

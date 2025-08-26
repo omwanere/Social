@@ -2,15 +2,16 @@ import axios from "axios";
 import { logout } from "@/redux/AuthSlice";
 import store from "@/redux/store";
 
+// Create Axios instance
 const api = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1`,
-  withCredentials: true,
+  withCredentials: true, // send cookies automatically
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Add a request interceptor to include the token
+// Optional: include Authorization header only if user has a token
 api.interceptors.request.use(
   (config) => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -19,17 +20,15 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Add a response interceptor to handle 401 errors
+// Handle 401 responses globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // If we get a 401, the token is invalid/expired
+      // Token expired or invalid
       store.dispatch(logout());
       window.location.href = "/login";
     }

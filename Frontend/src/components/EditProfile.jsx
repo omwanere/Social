@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import axios from "axios";
+import api from "@/lib/axios";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -48,8 +48,8 @@ const EditProfile = () => {
     }
     try {
       setLoading(true);
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/user/profile/edit",
+      const res = await api.post(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/user/profile/edit`,
         formData,
         {
           headers: {

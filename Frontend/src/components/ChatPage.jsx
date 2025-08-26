@@ -6,7 +6,8 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { MessageCircleCode } from "lucide-react";
 import Messages from "./Messages";
-import axios from "axios";
+// import axios from "axios";
+import api from "@/lib/axios";
 import { setMessages } from "@/redux/chatSlice";
 
 const ChatPage = () => {
@@ -19,8 +20,10 @@ const ChatPage = () => {
 
   const sendMessageHandler = async (receiverId) => {
     try {
-      const res = await axios.post(
-        `http://localhost:8000/api/v1/message/send/${receiverId}`,
+      const res = await api.post(
+        `${
+          import.meta.env.VITE_BACKEND_BASEURL
+        }/api/v1/message/send/${receiverId}`,
         { textMessage },
         {
           headers: {

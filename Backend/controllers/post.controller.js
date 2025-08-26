@@ -268,13 +268,11 @@ export const bookmarkPost = async (req, res) => {
       // already bookmarked -> remove from the bookmark
       await user.updateOne({ $pull: { bookmarks: post._id } });
       await user.save();
-      return res
-        .status(200)
-        .json({
-          type: "unsaved",
-          message: "Post removed from bookmark",
-          success: true,
-        });
+      return res.status(200).json({
+        type: "unsaved",
+        message: "Post removed from bookmark",
+        success: true,
+      });
     } else {
       // bookmark krna pdega
       await user.updateOne({ $addToSet: { bookmarks: post._id } });

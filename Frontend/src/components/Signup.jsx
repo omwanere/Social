@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import axios from "axios";
+import api from "@/lib/axios";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import ThemeToggle from "./ThemeToggle";
-
 const Signup = () => {
   const [input, setInput] = useState({
     username: "",
@@ -26,16 +25,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/user/register",
-        input,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      const res = await api.post("/api/v1/user/register", input);
       if (res.data.success) {
         navigate("/login");
         toast.success(res.data.message);
@@ -66,7 +56,7 @@ const Signup = () => {
         className="shadow-lg flex flex-col gap-5 p-8"
       >
         <div className="my-4">
-          <h1 className="text-center font-bold text-xl">LOGO</h1>
+          <h1 className="text-center font-bold text-xl">SOCIAL</h1>
           <p className="text-sm text-center">
             Signup to see photos & videos from your friends
           </p>

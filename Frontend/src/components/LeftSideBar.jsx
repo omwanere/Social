@@ -1,14 +1,8 @@
-import {
-  Heart,
-  Home,
-  LogOut,
-  MessageCircle,
-  PlusSquare,
-} from "lucide-react";
+import { Heart, Home, LogOut, MessageCircle, PlusSquare } from "lucide-react";
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { toast } from "sonner";
-import axios from "axios";
+//import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/AuthSlice";
@@ -18,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import { clearLikeNotifications } from "@/redux/rtnSlice";
 import ThemeToggle from "./ThemeToggle";
-
+import api from "@/lib/axios";
 const LeftSidebar = () => {
   const navigate = useNavigate();
   const { user } = useSelector((store) => store.auth);
@@ -30,9 +24,12 @@ const LeftSidebar = () => {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/v1/user/logout", {
-        withCredentials: true,
-      });
+      const res = await api.get(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/user/logout`,
+        {
+          withCredentials: true,
+        }
+      );
       if (res.data.success) {
         dispatch(setAuthUser(null));
         dispatch(setSelectedPost(null));
@@ -91,9 +88,11 @@ const LeftSidebar = () => {
                 <span>{item.text}</span>
                 {item.text === "Notifications" &&
                   likeNotification.length > 0 && (
-                    <Popover onOpenChange={(open) => {
-                      if (!open) dispatch(clearLikeNotifications());
-                    }}>
+                    <Popover
+                      onOpenChange={(open) => {
+                        if (!open) dispatch(clearLikeNotifications());
+                      }}
+                    >
                       <PopoverTrigger asChild>
                         <Button
                           size="icon"

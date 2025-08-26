@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import axios from "axios";
+import api from "@/lib/axios";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthUser } from "@/redux/AuthSlice";
 import ThemeToggle from "./ThemeToggle";
-
 const Login = () => {
   const [input, setInput] = useState({
     email: "",
@@ -27,19 +26,10 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/user/login",
-        input,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      const res = await api.post("/api/v1/user/login", input);
       if (res.data.success) {
         dispatch(setAuthUser(res.data.user));
-        navigate("/");
+        navigate("/home");
         toast.success(res.data.message);
         setInput({
           email: "",
@@ -48,7 +38,13 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
+      if (error.response?.status === 404) {
+        toast.error("Server not found. Please try again later.");
+      } else if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -67,7 +63,7 @@ const Login = () => {
         className="shadow-lg flex flex-col gap-5 p-8"
       >
         <div className="my-4">
-          <h1 className="text-center font-bold text-xl">LOGO</h1>
+          <h1 className="text-center font-bold text-xl">SOCIAL</h1>
           <p className="text-sm text-center">
             Login to see photos & videos from your friends
           </p>

@@ -7,9 +7,9 @@ import { useSelector } from "react-redux";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { AtSign, Heart, MessageCircle } from "lucide-react";
-import axios from "axios";
+//import axios from "axios";
 import { toast } from "sonner";
-
+import api from "@/lib/axios";
 const Profile = () => {
   const params = useParams();
   const userId = params.id;
@@ -27,8 +27,10 @@ const Profile = () => {
 
   const followHandler = async () => {
     try {
-      const res = await axios.post(
-        `http://localhost:8000/api/v1/user/follow/${userProfile?._id}`,
+      const res = await api.post(
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/user/follow/${
+          userProfile?._id
+        }`,
         {},
         { withCredentials: true }
       );
@@ -40,7 +42,9 @@ const Profile = () => {
         useGetSuggestedUsers(); // Refetch suggested users
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to follow/unfollow user");
+      toast.error(
+        error.response?.data?.message || "Failed to follow/unfollow user"
+      );
     }
   };
 
@@ -80,22 +84,20 @@ const Profile = () => {
                         Edit profile
                       </Button>
                     </Link>
-                    <Button
-                      variant="secondary"
-                      className="hover:bg-muted h-8"
-                    >
+                    <Button variant="secondary" className="hover:bg-muted h-8">
                       View archive
                     </Button>
-                    <Button
-                      variant="secondary"
-                      className="hover:bg-muted h-8"
-                    >
+                    <Button variant="secondary" className="hover:bg-muted h-8">
                       Ad tools
                     </Button>
                   </>
                 ) : isFollowing ? (
                   <>
-                    <Button variant="secondary" className="h-8" onClick={followHandler}>
+                    <Button
+                      variant="secondary"
+                      className="h-8"
+                      onClick={followHandler}
+                    >
                       Unfollow
                     </Button>
                     <Button variant="secondary" className="h-8">
@@ -103,7 +105,10 @@ const Profile = () => {
                     </Button>
                   </>
                 ) : (
-                  <Button className="bg-[#0095F6] hover:bg-[#3192d2] h-8" onClick={followHandler}>
+                  <Button
+                    className="bg-[#0095F6] hover:bg-[#3192d2] h-8"
+                    onClick={followHandler}
+                  >
                     Follow
                   </Button>
                 )}

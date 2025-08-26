@@ -1,9 +1,8 @@
 import axios from "axios";
 
+// Remove VITE_BACKEND_BASEURL from here since we'll use the full URL
 const api = axios.create({
-  baseURL:
-    import.meta.env.VITE_BACKEND_BASEURL ||
-    "https://social-nlhq.onrender.com/api/v1",
+  baseURL: "https://social-nlhq.onrender.com/api/v1",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

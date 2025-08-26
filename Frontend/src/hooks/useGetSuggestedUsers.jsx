@@ -3,10 +3,9 @@ import api from "@/lib/axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-console.log('VITE_BACKEND_BASEURL:', import.meta.env.VITE_BACKEND_BASEURL);
-
 const useGetSuggestedUsers = () => {
   const dispatch = useDispatch();
+  
   useEffect(() => {
     const fetchSuggestedUsers = async () => {
       try {
@@ -15,10 +14,12 @@ const useGetSuggestedUsers = () => {
           dispatch(setSuggestedUsers(res.data.users));
         }
       } catch (error) {
-        console.log(error);
+        console.error('Error fetching suggested users:', error);
       }
     };
+    
     fetchSuggestedUsers();
-  }, []);
+  }, [dispatch]);
 };
+
 export default useGetSuggestedUsers;

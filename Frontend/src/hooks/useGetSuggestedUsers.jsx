@@ -3,6 +3,8 @@ import api from "@/lib/axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
+console.log('VITE_BACKEND_BASEURL:', import.meta.env.VITE_BACKEND_BASEURL);
+
 const useGetSuggestedUsers = () => {
   const dispatch = useDispatch();
   useEffect(() => {

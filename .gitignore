@@ -17,4 +17,5 @@ Thumbs.db
 Frontend/node_modules/
 Backend/node_modules/
 .env
+Frontend/.env
 

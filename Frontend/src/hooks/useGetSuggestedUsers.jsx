@@ -10,10 +10,7 @@ const useGetSuggestedUsers = () => {
   useEffect(() => {
     const fetchSuggestedUsers = async () => {
       try {
-        const res = await api.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/user/suggested`,
-          { withCredentials: true }
-        );
+        const res = await api.get('/user/suggested');
         if (res.data.success) {
           dispatch(setSuggestedUsers(res.data.users));
         }

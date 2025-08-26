@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import axios from "axios";
@@ -9,6 +9,10 @@ import useGetSuggestedUsers from "@/hooks/useGetSuggestedUsers";
 const SuggestedUsers = () => {
   const { suggestedUsers, user } = useSelector((store) => store.auth);
   const [loadingId, setLoadingId] = useState(null);
+  const dispatch = useDispatch();
+  
+  // Call the hook at the component level
+  useGetSuggestedUsers();
 
   const handleFollow = async (suggestedUserId, isFollowing) => {
     try {
@@ -20,7 +24,15 @@ const SuggestedUsers = () => {
       );
       if (res.data.success) {
         toast.success(res.data.message);
-        useGetSuggestedUsers();
+        // Dispatch action to update the Redux store
+        dispatch({ 
+          type: 'auth/updateFollowStatus', 
+          payload: { 
+            suggestedUserId,
+            currentUserId: user._id,
+            isFollowing: !isFollowing 
+          } 
+        });
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to follow/unfollow user");

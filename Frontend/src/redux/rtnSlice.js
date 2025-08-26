@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const rtnSlice = createSlice({
   name: "realTimeNotification",
   initialState: {
-    likeNotification: [],
+    likeNotification: [], // [1,2,3]
   },
   reducers: {
     setLikeNotification: (state, action) => {

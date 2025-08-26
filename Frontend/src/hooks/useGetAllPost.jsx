@@ -1,5 +1,5 @@
 import { setPosts } from "@/redux/postSlice";
-import api from "@/lib/axios";
+import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
@@ -8,11 +8,9 @@ const useGetAllPost = () => {
   useEffect(() => {
     const fetchAllPost = async () => {
       try {
-        const res = await api.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/post/all`,
-          {
-            withCredentials: true,
-          }
+        const res = await axios.get(
+          "http://localhost:8000/api/v1/post/all",
+          { withCredentials: true }
         );
         if (res.data.success) {
           console.log(res.data.posts);

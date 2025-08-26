@@ -1,35 +1,29 @@
-import React, { createContext, useContext, useEffect } from "react";
-import { connectSocket, disconnectSocket } from "./socket";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
-  const userId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
-  const socketRef = React.useRef(null);
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    if (userId && token) {
-      socketRef.current = connectSocket(userId);
-      return () => {
-        if (socketRef.current) {
-          disconnectSocket();
-        }
-      };
-    }
-  }, [userId, token]);
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
+  }, [socket]);
 
-  return React.createElement(
-    SocketContext.Provider,
-    { value: socketRef.current },
-    children
+  return (
+    <SocketContext.Provider value={{ socket, setSocket }}>
+      {children}
+    </SocketContext.Provider>
   );
 };
 
 export const useSocket = () => {
-  const socket = useContext(SocketContext);
-  if (socket === null) {
-    throw new Error("useSocket must be used within a SocketProvider");
+  const context = useContext(SocketContext);
+  if (!context) {
+    throw new Error('useSocket must be used within a SocketProvider');
   }
-  return socket;
+  return context;
 };

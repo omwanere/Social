@@ -1,16 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import useGetAllMessage from "@/hooks/useGetAllMessage";
 import useGetRTM from "@/hooks/useGetRTM";
+import { toast } from "sonner";
 
 const Messages = ({ selectedUser }) => {
-  useGetRTM();
-  useGetAllMessage();
-  const { messages } = useSelector((store) => store.chat);
-  const { user } = useSelector((store) => store.auth);
+  const { messages } = useSelector((store) => store.chat || { messages: [] });
+  const { user } = useSelector((store) => store.auth || {});
+  
+  // Initialize hooks
+  const { error: rtmError } = useGetRTM() || {};
+  const { error: getAllMessageError } = useGetAllMessage() || {};
+  
+  // Handle errors
+  useEffect(() => {
+    if (rtmError) {
+      console.error('Real-time messaging error:', rtmError);
+      toast.error('Error setting up real-time messaging');
+    }
+    if (getAllMessageError) {
+      console.error('Error fetching messages:', getAllMessageError);
+      toast.error('Error loading messages');
+    }
+  }, [rtmError, getAllMessageError]);
   return (
     <div className="overflow-y-auto flex-1 p-4">
       <div className="flex justify-center">
@@ -41,7 +56,7 @@ const Messages = ({ selectedUser }) => {
                   className={`p-2 rounded-lg max-w-xs break-words ${
                     msg.senderId === user?._id
                       ? "bg-blue-500 text-white"
-                      : "bg-muted text-foreground"
+                      : "bg-gray-200 text-black"
                   }`}
                 >
                   {msg.message}

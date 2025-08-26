@@ -38,7 +38,7 @@ const Login = () => {
         // Store only necessary user data in the state
         const { password, ...userData } = res.data.user;
         dispatch(setAuthUser(userData));
-        navigate("/home");
+        navigate("/");
         toast.success(res.data.message);
         setInput({
           email: "",

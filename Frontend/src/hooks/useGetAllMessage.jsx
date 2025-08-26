@@ -1,6 +1,6 @@
 import { setMessages } from "@/redux/chatSlice";
 import { setPosts } from "@/redux/postSlice";
-import axios from "axios";
+import api from "../api/axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -21,7 +21,7 @@ const useGetAllMessage = () => {
       setError(null);
 
       try {
-        const res = await axios.get("/message/all/${selectedUser._id}", {
+        const res = await api.get("/message/all/${selectedUser._id}", {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",

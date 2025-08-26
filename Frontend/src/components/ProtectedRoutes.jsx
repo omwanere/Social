@@ -1,13 +1,16 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 const ProtectedRoutes = ({ children }) => {
   const { user } = useSelector((store) => store.auth);
   const location = useLocation();
 
   // If we're on login/signup page and user is authenticated, redirect to home
-  if ((location.pathname === "/login" || location.pathname === "/signup") && user) {
+  if (
+    (location.pathname === "/login" || location.pathname === "/signup") &&
+    user
+  ) {
     return <Navigate to="/home" replace />;
   }
 

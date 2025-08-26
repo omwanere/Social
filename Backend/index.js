@@ -33,34 +33,28 @@ const allowedOrigins = [
   "https://social-nlhq.onrender.com"
 ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  credentials: true, // This is important for cookies
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: [
-    "Content-Type", 
-    "Authorization", 
-    "X-Requested-With",
-    "Accept",
-    "Origin"
-  ],
-  exposedHeaders: ["set-cookie"],
-  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
-};
-
-// Apply CORS before other routes
-app.use(cors(corsOptions));
-// Enable pre-flight across-the-board
-app.options('*', cors(corsOptions));
+// Enable CORS for all routes
+app.use((req, res, next) => {
+  // Allow all origins
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  
+  // Allow credentials (cookies, authorization headers)
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  // Allow all headers that might be sent
+  if (req.method === 'OPTIONS') {
+    // Handle preflight requests
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control'
+    );
+    res.header('Access-Control-Expose-Headers', 'set-cookie');
+    return res.status(200).end();
+  }
+  
+  next();
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {

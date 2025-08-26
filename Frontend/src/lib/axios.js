@@ -2,8 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL:
-    process.env.VITE_BACKEND_BASEURL ||
-    "https://social-nlhq.onrender.com/api/v1",
+    import.meta.env.VITE_BACKEND_BASEURL || "https://social-nlhq.onrender.com",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

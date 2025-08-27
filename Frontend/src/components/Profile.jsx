@@ -28,7 +28,7 @@ const Profile = () => {
   const followHandler = async () => {
     try {
       const res = await api.post(
-        "/user/follow/${userProfile?._id}",
+        `/user/follow/${userProfile?._id}`,
         {},
         { withCredentials: true }
       );

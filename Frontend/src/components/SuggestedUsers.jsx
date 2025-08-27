@@ -17,7 +17,7 @@ const SuggestedUsers = () => {
     try {
       setLoadingId(suggestedUserId);
       const res = await api.post(
-        "/user/follow/${suggestedUserId}",
+        `/user/follow/${suggestedUserId}`,
         {},
         { withCredentials: true }
       );

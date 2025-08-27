@@ -21,7 +21,7 @@ const ChatPage = () => {
   const sendMessageHandler = async (receiverId) => {
     try {
       const res = await api.post(
-        "/message/send/${receiverId}",
+        `/message/send/${receiverId}`,
         { textMessage },
         {
           headers: {

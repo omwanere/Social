@@ -21,7 +21,7 @@ const useGetAllMessage = () => {
       setError(null);
 
       try {
-        const res = await api.get("/message/all/${selectedUser._id}", {
+        const res = await api.get(`/message/all/${selectedUser._id}`, {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
